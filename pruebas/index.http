@@ -1,0 +1,414 @@
+# Cliente para realizar las llamadas necesarias (GET de todos los comercios, GET de uno, POST, PUT y DELETE)
+# En todas las peticiones, hay que incluir la API KEY correcta (especificada en el archivo .env) para que funcionen bien
+
+
+### Introducimos un nuevo comercio con POST
+
+POST http://localhost:3000/api/businesses HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercio1",
+  "cif": "B76836278",
+  "address": "calle 1",
+  "email": "comercio1@gmail.com",
+  "contactPhone": "123456789",
+  "pageId": 32
+}
+
+### Introducimos un nuevo comercio con POST
+# Va a dar error porque no estamos haciendo la solicitud con la api-key correcta establecida en .env
+
+POST http://localhost:3000/api/businesses HTTP/1.1
+Content-Type: application/json
+api_key: otra_api_key
+
+{
+  "name": "comercioPrueba1",
+  "cif": "G67845678",
+  "address": "calle prueba",
+  "email": "comercioPrueba1@gmail.com",
+  "contactPhone": "865660943",
+  "pageId": 98
+}
+
+### Introducimos otro comercio con POST
+
+POST http://localhost:3000/api/businesses HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercio2",
+  "cif": "A12342345",
+  "address": "calle 2",
+  "email": "comercio2@gmail.com",
+  "contactPhone": "655443378",
+  "pageId": 35
+}
+
+### Introducimos otro comercio con POST
+# No va a funcionar porque el CIF no cumple los requisitos: tiene 8 caracteres y deben ser 9
+
+POST http://localhost:3000/api/businesses HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioPrueba2",
+  "cif": "A1234234",
+  "address": "calle prueba 2",
+  "email": "comercioPrueba2@gmail.com",
+  "contactPhone": "722998162",
+  "pageId": 38
+}
+
+### Introducimos otro comercio con POST
+
+POST http://localhost:3000/api/businesses HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercio3",
+  "cif": "C12234234",
+  "address": "calle 3",
+  "email": "comercio3@gmail.com",
+  "contactPhone": "766538292",
+  "pageId": 40
+}
+
+### Introducimos un nuevo comercio con POST
+# Va a dar error porque el campo "email" no cumple con los requisitos establecidos en el validator
+
+POST http://localhost:3000/api/businesses HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioPrueba3",
+  "cif": "S98237482",
+  "address": "calle prueba 3",
+  "email": "comercioPrueba3.com",
+  "contactPhone": "722993234",
+  "pageId": 12
+}
+
+### Introducimos un nuevo comercio con POST
+# Va a dar error porque el campo "contactPhone" no cumple con los requisitos establecidos en el validator
+
+POST http://localhost:3000/api/businesses HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioPrueba4",
+  "cif": "F34225432",
+  "address": "calle prueba 4",
+  "email": "comercioPrueba4@gmail.com",
+  "contactPhone": "telefono",
+  "pageId": 13
+}
+
+### Introducimos un nuevo comercio con POST
+# Va a dar error porque el campo "pageId" no es Number como hemos establecido en el modelo de comercios
+
+POST http://localhost:3000/api/businesses HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioPrueba5",
+  "cif": "N23948573",
+  "address": "calle prueba 4",
+  "email": "comercioPrueba4@gmail.com",
+  "contactPhone": "688946372",
+  "pageId": "idPrueba"
+}
+
+### Introducimos otro comercio con POST
+# No va a funcionar porque este comercio ya existe --> el CIF A12342345 corresponde al comercio2
+
+POST http://localhost:3000/api/businesses HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioPrueba6",
+  "cif": "A12342345",
+  "address": "calle prueba 5",
+  "email": "comercioPrueba5@gmail.com",
+  "contactPhone": "667343473",
+  "pageId": 39
+}
+
+### Obtenemos la lista de todos los comercios con GET
+# Se va a ordenar por la ordenacion predeterminada de Mongo
+
+GET http://localhost:3000/api/businesses HTTP/1.1
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+### Obtenemos la lista de todos los comercios con GET
+# Va a dar error porque no estamos haciendo la solicitud con la api-key correcta establecida en .env
+
+GET http://localhost:3000/api/businesses HTTP/1.1
+api_key: otra_api_key
+
+### Obtenemos la lista de todos los comercios ordenados por el CIF ascendentemente con GET
+# Ponemos el parametro query de ordenacion a true
+
+GET http://localhost:3000/api/businesses?orderByCif=true HTTP/1.1
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+### Obtenemos la lista de todos los comercios poniendo el parametro query de ordenacion a false con GET
+# Se va a ordenar por la ordenacion predeterminada de Mongo
+
+GET http://localhost:3000/api/businesses?orderByCif=false HTTP/1.1
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+### Obtenemos un comercio existente por su CIF con GET
+# El CIF A12342345 corresponde al comercio2
+
+GET http://localhost:3000/api/businesses/A12342345 HTTP/1.1
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+### Intentamos obtener un comercio no existente por su CIF con GET
+
+GET http://localhost:3000/api/businesses/A12348345 HTTP/1.1
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+### Modificamos un comercio existente con PUT
+# El CIF A12342345 corresponde al comercio2
+
+PUT http://localhost:3000/api/businesses/A12342345 HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioCambiado1",
+  "cif": "A12342345",
+  "address": "calle nueva 1",
+  "email": "comercioCambiado1@gmail.com",
+  "contactPhone": "986217272",
+  "pageId": 45
+}
+
+### Modificamos un comercio existente con PUT
+# Va a dar error porque no estamos haciendo la solicitud con la api-key correcta establecida en .env
+
+PUT http://localhost:3000/api/businesses/A12342345 HTTP/1.1
+Content-Type: application/json
+api_key: otra_api_key
+
+{
+  "name": "comercioCambiadoPrueba1",
+  "cif": "A12342345",
+  "address": "calle nueva prueba 1",
+  "email": "comercioCambiadoPrueba1@gmail.com",
+  "contactPhone": "986217272",
+  "pageId": 47
+}
+
+### Modificamos un comercio no existente con PUT
+# No va a funcionar porque el comercio con ese CIF no existe
+
+PUT http://localhost:3000/api/businesses/A17342345 HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioCambiadoPrueba2",
+  "cif": "A17342345",
+  "address": "calle nueva prueba 2",
+  "email": "comercioCambiadoPrueba2@gmail.com",
+  "contactPhone": "917223674",
+  "pageId": 20
+}
+
+### Modificamos un comercio existente con PUT
+# No va a funcionar porque falta el campo "address" en la solicitud (pasaría lo mismo con el resto de campos)
+
+PUT http://localhost:3000/api/businesses/A12342345 HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioCambiadoPrueba3",
+  "cif": "A12342345",
+  "email": "comercioCambiadoPrueba3@gmail.com",
+  "contactPhone": "986217272",
+  "pageId": 41
+}
+
+### Modificamos un comercio existente con PUT
+# No va a funcionar porque el CIF del comercio en la ruta no coincide con el del body
+
+PUT http://localhost:3000/api/businesses/A12342345 HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioCambiadoPrueba4",
+  "cif": "D12342345",
+  "address": "calle nueva prueba 4s",
+  "email": "comercioCambiadoPrueba4@gmail.com",
+  "contactPhone": "733882917",
+  "pageId": 50
+}
+
+### Borramos un comercio existente con DELETE (borrado físico)
+# Va a dar error porque no estamos haciendo la solicitud con la api-key correcta establecida en .env
+
+DELETE http://localhost:3000/api/businesses/B76836278 HTTP/1.1
+api_key: otra_api_key
+
+### Borramos un comercio existente con DELETE (borrado físico)
+# Si ponemos en el parametro query softDelete=false tambien se hace un borrado fisico
+# El comercio con CIF B76836278 corresponde al comercio1
+
+DELETE http://localhost:3000/api/businesses/B76836278 HTTP/1.1
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+### Borramos un comercio existente con soft DELETE (borrado lógico)
+# Va a dar error porque no estamos haciendo la solicitud con la api-key correcta establecida en .env
+
+DELETE http://localhost:3000/api/businesses/C12234234?softDelete=true HTTP/1.1
+api_key: otra_api_key
+
+### Borramos un comercio existente con soft DELETE (borrado lógico)
+# El comercio con CIF C12234234 corresponde al comercio3
+# El campo deleted pasará de ser "false" a ser "true"
+
+DELETE http://localhost:3000/api/businesses/C12234234?softDelete=true HTTP/1.1
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+### Borramos un comercio no existente con DELETE (borrado físico)
+# No va a funcionar porque el comercio con ese CIF no existe en la base de datos
+
+DELETE http://localhost:3000/api/businesses/Z12342345 HTTP/1.1
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+### Borramos un comercio no existente con soft DELETE (borrado lógico)
+# No va a funcionar porque el comercio con ese CIF no existe en la base de datos
+
+DELETE http://localhost:3000/api/businesses/Z12342345?softDelete=true HTTP/1.1
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+### Modificamos campos de un comercio existente con PATCH
+# El comercio con CIF A12342345 corresponde al comercio2
+
+PATCH http://localhost:3000/api/businesses/A12342345 HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioModificado1",
+  "cif": "A12342345",
+  "address": "calle modificada 1"
+}
+
+### Modificamos campos de un comercio existente con PATCH
+# Va a dar error porque no estamos haciendo la solicitud con la api-key correcta establecida en .env
+
+PATCH http://localhost:3000/api/businesses/A12342345 HTTP/1.1
+Content-Type: application/json
+api_key: otra_api_key
+
+{
+  "name": "comercioModificadoPrueba1",
+  "cif": "A12342345",
+  "address": "calle modificada prueba 1"
+}
+
+### Modificamos un comercio no existente con PATCH
+# No va a funcionar porque el comercio con ese CIF no existe en la base de datos
+
+PATCH http://localhost:3000/api/businesses/A17342335 HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioModificadoPrueba2",
+  "cif": "A17342335",
+  "address": "calle modificada prueba 2"
+}
+
+### Modificamos un comercio existente con PATCH
+# No va a funcionar porque el campo "email" no cumple los requisitos del validator
+
+PATCH http://localhost:3000/api/businesses/A12342345 HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioModificadoPrueba3",
+  "cif": "A12342345",
+  "email": "correoprueba"
+}
+
+### Modificamos un comercio existente con PATCH
+# No va a funcionar porque el CIF del comercio de la ruta no coincide con el del body
+
+PATCH http://localhost:3000/api/businesses/A12342345 HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioModificadoPrueba4",
+  "cif": "D12342345",
+  "address": "calle modificada prueba 4"
+}
+
+### Modificamos un comercio existente con PATCH
+# No va a funcionar porque el campo "name" no cumple con los requisitos estblecitos en el validator: tiene mas de 30 caracteres
+
+PATCH http://localhost:3000/api/businesses/A12342345 HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioModificadoPrueba5aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "cif": "A12342345",
+  "address": "calle modificada prueba 5"
+}
+
+### Modificamos un comercio existente con PATCH
+# Probamos a no pasar el CIF como dato a modificar (porque en un PATCH no es obligatorio pasar todos los campos como en un PUT) y funciona
+
+PATCH http://localhost:3000/api/businesses/A12342345 HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioModificadoPrueba6",
+  "contactPhone": "833772832"
+}
+
+### Modificamos campos de un comercio NO existente con PATCH
+# El comercio con CIF C12234234 corresponde al comercio3 que hemos eliminado antes con un SoftDelete
+# Entonces, el comercio no existirá para ser eliminado
+
+PATCH http://localhost:3000/api/businesses/C12234234 HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioModificadoPrueba7",
+  "cif": "C12234234",
+  "address": "calle modificada prueba 7"
+}
+
+### Modificamos campos de un comercio NO existente con PATCH
+# El comercio con CIF B76836278 corresponde al comercio1 que hemos eliminado antes con un HardDelete
+# Entonces, el comercio no existirá para ser eliminado
+
+PATCH http://localhost:3000/api/businesses/B76836278 HTTP/1.1
+Content-Type: application/json
+api_key: 6f45aad357023d583fd11efda0d5a73514a85e22b2e35f55d522d4368f8ff214
+
+{
+  "name": "comercioModificadoPrueba8",
+  "cif": "B76836278",
+  "address": "calle modificada prueba 8"
+}
